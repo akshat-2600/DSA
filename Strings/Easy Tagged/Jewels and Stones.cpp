@@ -1,6 +1,6 @@
 /*
     Company Tags                :  
-    GeeksForGeeks Link          :  https://leetcode.com/problems/jewels-and-stones/description/
+    LeetCode Link          :  https://leetcode.com/problems/jewels-and-stones/description/
 
 
 
