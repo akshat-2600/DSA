@@ -9,6 +9,7 @@
 // O(n^2)
 // O(n)  (recursion stack)
 
+
 class Solution {
   public:
     Node* build(vector<int>& pre, vector<int>& preMirror, int& preIndex, int l, int h, int size) {
@@ -140,6 +141,7 @@ class Solution {
         return build(pre, preMirror, 0, pre.length - 1);
     }
 }
+
 
 // Approach : HashMap
 // T.C      : O(n)
