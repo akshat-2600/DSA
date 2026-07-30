@@ -5,9 +5,9 @@
 /************************************************************ C++ ************************************************************/
 
 
-// Approach : Greedy / Counting - > Greedy strategy to distribute distinct characters across 8 keys minimizing push count.
-// T.C      : O(n)
-// S.C      : O(1)
+// Approach 1 : Greedy / Counting - > Greedy strategy to distribute distinct characters across 8 keys minimizing push count.
+// T.C        : O(n)
+// S.C        : O(1)
 
 class Solution {
 public:
@@ -33,11 +33,31 @@ public:
 };
 
 
+// Approach 2 : Calculating pushes by iterating over string
+// T.C        : O(n)
+// S.C        : O(1)
+
+class Solution {
+public:
+    int minimumPushes(string word) {
+        int n = word.length();
+
+        int pushes = 0;
+
+        for (int i = 0; i < n; i++) {
+            pushes += (i/8) + 1;
+        }
+
+        return pushes;
+    }
+};
+
+
 /************************************************************ Java ************************************************************/
 
-// Approach : Greedy / Counting - > Greedy strategy to distribute distinct characters across 8 keys minimizing push count.
-// T.C      : O(n)
-// S.C      : O(1)
+// Approach 1 : Greedy / Counting - > Greedy strategy to distribute distinct characters across 8 keys minimizing push count.
+// T.C        : O(n)
+// S.C        : O(1)
 
 
 class Solution {
@@ -60,5 +80,24 @@ class Solution {
         count += (idx * n);
 
         return count;
+    }
+}
+
+
+// Approach 2 : Calculating pushes by iterating over string
+// T.C        : O(n)
+// S.C        : O(1)
+
+class Solution {
+    public int minimumPushes(String word) {
+        int n = word.length();
+
+        int pushes = 0;
+
+        for (int i = 0; i < n; i++) {
+            pushes += (i/8) + 1;
+        }
+
+        return pushes;
     }
 }
