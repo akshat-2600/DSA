@@ -1,7 +1,8 @@
 /*
-    Company Tags             : 
-    GeeksForGeeks Link       :   https://www.geeksforgeeks.org/problems/connecting-the-graph/1
+    Company Tags        : 
+    LeetCode Link       :   https://leetcode.com/problems/find-the-lexicographically-smallest-valid-sequence/description/
 
+*/    
 
 /************************************************************ C++ ************************************************************************/
 
