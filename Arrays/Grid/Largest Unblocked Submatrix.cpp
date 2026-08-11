@@ -1,6 +1,6 @@
 /*
     Company Tags                : 
-    Leetcode Link               :  https://www.geeksforgeeks.org/problems/largest-unblocked-submatrix/1
+    GeekForGeeks Link           :  https://www.geeksforgeeks.org/problems/largest-unblocked-submatrix/1
 
 
 /**************************************************************** C++ ****************************************************************/
