@@ -60,3 +60,23 @@ public:
         return true;
     }
 };
+
+
+// Approach 2: 
+// T.C : O(1)
+// S.C : O(1)
+
+class Solution {
+public:
+    bool uniformArray(vector<int>& nums1) {
+        return true;
+
+        /*
+            if all odd -> true
+            if all even -> true
+            if even-odd mix  -> true 
+            because an even number can be converted to odd by subtracking from a odd number 
+            because parity changes when we subtract from a ODD NUMBER
+        */
+    }
+};
