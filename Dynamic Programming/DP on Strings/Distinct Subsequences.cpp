@@ -1,6 +1,6 @@
 /*
-    Company Tags    :   SWIGGY
-    Leetcode Link   :   https://leetcode.com/problems/distinct-subsequences/description/
+    Company Tags    :   GOOGLE
+    Leetcode Link   :   https://leetcode.com/problems/distinct-subsequences-ii/description/
 
 */
 
@@ -8,146 +8,171 @@
 /******************************************************** C++ ********************************************************/
 
 // Approach-1 : Pure Recursion
-// T.C        : O(2^ns)
-// S.C        : O(ns)   (recursion call stack)
+// T.C        : O(2^n)
+// S.C        : O(3^n)   
 
 class Solution {
-public:
+  public:
     int n;
-
-    int solve(int i, int j, string& s, string& t) {
-        if (i == n) {
-            if (j == t.length()) {
-                return 1;
-            }
+    
+    int solve(int idx, int incIdx, int decIdx, vector<int>& arr) {
+        if (idx == n) {
             return 0;
         }
         
-        int take  = 0;
-        int skip1 = 0;
-        int skip2 = 0;
-
-        if (s[i] == t[j]) {
-            take  = solve(i+1, j+1, s, t);  // take
-            skip2 = solve(i+1, j, s, t);    // skip although equal
-        } else {
-            skip1 = solve(i+1, j, s, t);    // skip
+        int take1 = INT_MAX;
+        int take2 = INT_MAX;
+        int skip  = INT_MAX;
+        
+        skip = 1 + solve(idx+1, incIdx, decIdx, arr);
+        
+        if (incIdx == -1 || arr[idx] > arr[incIdx]) {
+            take1 = solve(idx+1, idx, decIdx, arr);
         }
-        return take + skip1 + skip2;
+        if (decIdx == -1 || arr[idx] < arr[decIdx]) {
+            take2 = solve(idx+1, incIdx, idx, arr);
+        }
+        
+        return min({take1, take2, skip});
     }
-
-    int numDistinct(string s, string t) {
-        n = s.length();
-        int i = 0;
-        int j = 0;
-
-        return solve(i, j, s, t);
+  
+    int minCount(vector<int>& arr) {
+        
+        n = arr.size();
+        
+        return solve(0, -1, -1, arr);
+        
     }
 };
 
 
 // Approach-2 : Recursion + Memoization
-// T.C        : O(ns * nt)
-// S.C        : o(ns * nt)  + O(ns) -> (recursion call stack) 
+// T.C        : O(n^3)
+// S.C        : o(n^3)  
 
 class Solution {
-public:
+  public:
     int n;
-    int dp[1001][1001];
-
-    int solve(int i, int j, string& s, string& t) {
-        if (i == n) {
-            if (j == t.length()) {
-                return 1;
-            }
+    int dp[101][101][101];
+    
+    int solve(int idx, int incIdx, int decIdx, vector<int>& arr) {
+        if (idx == n) {
             return 0;
         }
-
-        if (dp[i][j] != -1) {
-            return dp[i][j];
+        
+        if (dp[idx][incIdx+1][decIdx+1] != -1) {
+            return dp[idx][incIdx+1][decIdx+1];
         }
         
-        int take  = 0;
-        int skip1 = 0;
-        int skip2 = 0;
-
-        if (s[i] == t[j]) {
-            take  = solve(i+1, j+1, s, t);  
-            skip2 = solve(i+1, j, s, t);      
-        } else {
-            skip1 = solve(i+1, j, s, t);
+        int take1 = INT_MAX;
+        int take2 = INT_MAX;
+        int skip  = INT_MAX;
+        
+        skip = 1 + solve(idx+1, incIdx, decIdx, arr);
+        
+        if (incIdx == -1 || arr[idx] > arr[incIdx]) {
+            take1 = solve(idx+1, idx, decIdx, arr);
         }
-        return dp[i][j] = take + skip1 + skip2;
+        if (decIdx == -1 || arr[idx] < arr[decIdx]) {
+            take2 = solve(idx+1, incIdx, idx, arr);
+        }
+        
+        
+        return dp[idx][incIdx+1][decIdx+1] = min({take1, take2, skip});
     }
-
-    int numDistinct(string s, string t) {
-        n = s.length();
-        int i = 0;
-        int j = 0;
+  
+    int minCount(vector<int>& arr) {
+        
+        n = arr.size();
         memset(dp, -1, sizeof(dp));
-
-        return solve(i, j, s, t);
+        
+        return solve(0, -1, -1, arr);
+        
     }
 };
 
 // Approach-3 : Bottom Up
-// T.C        : O(ns * nt)
-// S.C        : O(ns * nt)
+// T.C        : O(n^3)
+// S.C        : O(n^3)
 
 class Solution {
-public:
-    int numDistinct(string s, string t) {
-        int ns = s.length();
-        int nt = t.length();
-        vector<vector<unsigned int>> dp(ns+1, vector<unsigned int>(nt+1, 0));
-
-        // Base case
-        for (int i = 0; i <= ns; i++) {
-            dp[i][nt] = 1;
+  public:
+    int minCount(vector<int>& arr) {
+        int n = arr.size();
+        
+        vector<vector<vector<int>>> dp(n + 1, vector<vector<int>>(n + 1, vector<int>(n + 1, 0)));
+        
+        for (int i = 0; i <= n; i++) {
+            for (int d = 0; d <= n; d++) {
+                dp[n][i][d] = 0;
+            }
         }
-
-        for (int i = ns-1; i >= 0; i--) {
-            for (int j = nt-1; j >= 0; j--) {
-                if (s[i] == t[j]) {
-                    dp[i][j] = dp[i+1][j+1] + dp[i+1][j];
-                } else {
-                    dp[i][j] = dp[i+1][j];
+        
+        for (int idx = n-1; idx >= 0; idx--) {
+            for (int inc = 0; inc <= n; inc++) {
+                for (int dec = 0; dec <= n; dec++) {
+                    int take1 = INT_MAX;
+                    int take2 = INT_MAX;
+                    int skip  = INT_MAX;
+                    
+                    skip = 1 + dp[idx + 1][inc][dec];
+                    
+                    if (inc == 0 || arr[idx] > arr[inc - 1]) {
+                        take1 = dp[idx+1][idx+1][dec];
+                    }
+                    
+                    
+                    if (dec == 0 || arr[idx] < arr[dec - 1]) {
+                        take2 = dp[idx+1][inc][idx+1];
+                    } 
+                    
+                    dp[idx][inc][dec] = min({take1, take2, skip});
                 }
             }
         }
-        return (int)dp[0][0];
+        return dp[0][0][0];
     }
 };
 
 // Approach-4 : Bottom Up Space Optimized
-// T.C        : O(ns * nt)
-// S.C        : O(nt)
+// T.C        : O(n^3)
+// S.C        : O(n^2)
 
 class Solution {
-public:
-    int numDistinct(string s, string t) {
-        int ns = s.length();
-        int nt = t.length();
-        vector<unsigned int> curr(nt+1, 0);
-
-        // Base case
-        curr[nt] = 1;
-
-        vector<unsigned int> prev = curr;
-
-        for (int i = ns-1; i >= 0; i--) {
-            for (int j = nt-1; j >= 0; j--) {
-                if (s[i] == t[j]) {
-                    prev[j] = curr[j+1] + curr[j];
-                } else {
-                    prev[j] = curr[j];
+  public:
+    int minCount(vector<int>& arr) {
+        int n = arr.size();
+        
+        vector<vector<int>> next(n + 1, vector<int>(n + 1, 0));
+        vector<vector<int>> curr(n + 1, vector<int>(n + 1, 0));
+        
+        for (int idx = n-1; idx >= 0; idx--) {
+            for (int inc = 0; inc <= n; inc++) {
+                for (int dec = 0; dec <= n; dec++) {
+                    int take1 = INT_MAX;
+                    int take2 = INT_MAX;
+                    int skip  = INT_MAX;
+                    
+                    skip = 1 + next[inc][dec];
+                    
+                    if (inc == 0 || arr[idx] > arr[inc - 1]) {
+                        take1 = next[idx+1][dec];
+                    }
+                    
+                    
+                    if (dec == 0 || arr[idx] < arr[dec - 1]) {
+                        take2 = next[inc][idx+1];
+                    } 
+                    
+                    curr[inc][dec] = min({take1, take2, skip});
                 }
             }
-            curr = prev;
+            next = curr;
         }
-        return (int)curr[0];
+        return next[0][0];
     }
 };
+
 
 /******************************************************** JAVA ********************************************************/
 
