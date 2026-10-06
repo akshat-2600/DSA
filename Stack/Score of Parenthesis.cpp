@@ -1,4 +1,4 @@
-/*
+/** 
     Company Tags    :   
     LeetCode Link   :   https://leetcode.com/problems/score-of-parentheses/
 
