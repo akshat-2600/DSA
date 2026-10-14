@@ -7,8 +7,10 @@
 
 /******************************************************** C++ ********************************************************/
 
-// T.C   : O(n)
-// S.C   : O(n)
+
+// Approach : BFS
+// T.C      : O(n)
+// S.C      : O(n)
 
 class Solution {
 public:
@@ -50,3 +52,45 @@ public:
     }
 };
 
+
+// Approach : DFS
+// T.C      : O(n)
+// S.C      : O(n)
+
+class Solution {
+public:
+    unordered_map<int, int> mp;  // level, sum
+
+    void DFS(TreeNode* root, int level) {
+        if (root == nullptr) {
+            return;
+        }
+
+        if (root->left != nullptr) {
+            DFS(root->left, level+1);
+        }
+
+        mp[level] += root->val;
+
+        if (root->right != nullptr) {
+            DFS(root->right, level+1);
+        }
+    }
+
+    int maxLevelSum(TreeNode* root) {
+        if (!root) return 1;
+
+        DFS(root, 1);
+
+        int maxWidth = INT_MIN;
+        int level    = 1;
+
+        for (auto [p, sum] : mp) {
+            if (maxWidth < sum) {
+                maxWidth = sum;
+                level = p;
+            }
+        }
+        return level;
+    }
+};
